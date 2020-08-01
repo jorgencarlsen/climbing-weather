@@ -1,1 +1,5 @@
-{ "openWeatherApiKey": "a061b30e39e28016130152aab2381b8c" }
+{
+  "openWeatherApiKey": "a061b30e39e28016130152aab2381b8c",
+  "apiBase": "http://api.openweathermap.org/data/2.5/",
+  "iconUrl": "http://openweathermap.org/img/wn/"
+}
