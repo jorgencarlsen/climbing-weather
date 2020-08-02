@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import moment from 'moment';
 import config from '../config.json';
 import FiveDayForecast from './FiveDayForecast';
+import { useState } from 'react';
 
 const CurrentWeather = styled.div`
   color: white;
   padding: 20px;
   margin: 20px;
   width: 40%;
+  transition: all 5s linear;
+  height: 220px;
+  transition: all 0.25s ease-out;
 
   //day gradient
   background-image: linear-gradient(
@@ -32,6 +36,20 @@ const CurrentWeather = styled.div`
 
   border-radius: 16px;
 
+  ${(props) => {
+    console.log(props.showForecast);
+    if (props.showForecast) {
+      return `
+      height: 500px;
+    `;
+    } else {
+      return `
+      height: 220px;
+      transition: all 0.1s ease-out .1s;
+      `;
+    }
+  }}
+
   .description {
     text-transform: capitalize;
   }
@@ -40,7 +58,7 @@ const CurrentWeather = styled.div`
 const DetailsContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   padding: 20px;
   margin: -10px 0;
@@ -52,19 +70,25 @@ const DetailsContainer = styled.div`
 
   img {
     padding: 0;
-    margin-right: 50px;
-    filter: hue-rotate(50deg) brightness(170%);
+    //margin-right: 50px;
+    //filter: hue-rotate(50deg) brightness(170%);
   }
 `;
 
 const iconUrl = config.iconUrl;
 
 const WeatherWidget = (props) => {
+  const [showForecast, setShowForecast] = useState(false);
+
+  const toggleForecastView = function () {
+    setShowForecast(!showForecast);
+  };
+
   const cityName = props.data.name;
-  const cityData = props.data.data;
+  const cityWeatherData = props.data.weather;
 
   //Get Current Weather Data
-  const currentWeather = cityData.current;
+  const currentWeather = cityWeatherData.current;
   const latestDate = moment
     .unix(currentWeather.dt)
     .format('dddd, MMMM Do YYYY h:mma');
@@ -76,17 +100,21 @@ const WeatherWidget = (props) => {
   const windSpeed = currentWeather.wind_speed;
 
   //get forecast Data
-  const forecast = cityData.daily;
+  const forecast = cityWeatherData.daily;
 
   return (
-    <CurrentWeather>
+    <CurrentWeather showForecast={showForecast}>
       <div>
         <h1>{cityName}</h1>
         <p>{latestDate}</p>
       </div>
 
       <DetailsContainer>
-        <img src={iconUrl + currentWeatherIcon + '@2x.png'} alt={weatherType} />
+        <img
+          className="weather-icon"
+          src={iconUrl + currentWeatherIcon + '@2x.png'}
+          alt={weatherType}
+        />
         <div>
           <h2 className="description">
             {description} {Math.round(temperature)}°
@@ -95,9 +123,11 @@ const WeatherWidget = (props) => {
             Wind: {windDirection}° at {Math.round(windSpeed)} MPH
           </p>
         </div>
+        <button onClick={toggleForecastView}>View Forecast</button>
       </DetailsContainer>
 
-      <FiveDayForecast data={forecast} />
+      <FiveDayForecast data={forecast} toggle={showForecast} />
+      {/* {showForecast && <FiveDayForecast data={forecast} />} */}
     </CurrentWeather>
   );
 };

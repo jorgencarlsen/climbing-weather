@@ -17,3 +17,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.weather-icon {
+  filter: hue-rotate(50deg) brightness(170%);
+  margin: -10px -10px;
+}
+
+button {
+  color: white;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}

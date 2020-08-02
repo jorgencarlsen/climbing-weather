@@ -38,7 +38,6 @@ async function getCoordinates(data) {
     `${googleGeoCodingApiBase}${encoded}&key=${googleApiKey}`
   );
 
-  console.log(apiData);
   const returnObject = apiData.data.results[0];
   //.geometry.location;
 
@@ -87,31 +86,25 @@ class Header extends Component {
   }
 
   createCitiesObj = async (city) => {
-    const cityData = await getCoordinates(city);
-    const cityName = cityData.formatted_address;
-    const { lat, lng } = cityData.geometry.location;
+    const googleGeoInfo = await getCoordinates(city);
+    const cityName = googleGeoInfo.formatted_address;
+    const { lat, lng } = googleGeoInfo.geometry.location;
 
-    const { data } = await axios.get(
+    const { data: weather } = await axios.get(
       `${apiBase}onecall?lat=${lat}&lon=${lng}&units=imperial&appid=${apiKey}`
     );
 
-    const cityObject = { name: cityName, data };
+    const cityObject = { name: cityName, weather };
     return cityObject;
   };
 
   render() {
-    //return this.renderHelper();
     const cityData = this.state.cityData;
 
     if (cityData.length === 0) {
       return <p>Loading data...</p>;
     }
 
-    //const firstCity = cityData;
-
-    // const weatherIcon = data.weather[0].icon;
-    // const weatherType = data.weather[0].description;
-    // const date = moment.unix(data.dt).format('dddd MMMM Do YYYY h:mma');
     return (
       <HeaderStyles>
         <ImgContainer>
