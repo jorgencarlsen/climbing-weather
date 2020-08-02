@@ -1,5 +1,5 @@
 {
-  "openWeatherApiKey": "a061b30e39e28016130152aab2381b8c",
   "apiBase": "http://api.openweathermap.org/data/2.5/",
-  "iconUrl": "http://openweathermap.org/img/wn/"
+  "iconUrl": "http://openweathermap.org/img/wn/",
+  "googleGeoCodingApiBase": "https://maps.googleapis.com/maps/api/geocode/json?address="
 }
