@@ -9,7 +9,6 @@ import WeatherWidget from './WeatherWidget';
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 const apiBase = config.apiBase;
-const iconUrl = config.iconUrl;
 
 //Day/Night backrounds
 const backgrounds = {
@@ -25,6 +24,8 @@ const cities = [
   'Yosemite',
   'Tuolumne Meadows',
   'San Francisco',
+  'Chicago',
+  'Novato',
 ];
 
 //get lat and long coordinates from city name
@@ -37,7 +38,8 @@ async function getCoordinates(data) {
     `${googleGeoCodingApiBase}${encoded}&key=${googleApiKey}`
   );
 
-  const returnObject = apiData.data.results[0].geometry.location;
+  const returnObject = apiData.data.results[0];
+  //.geometry.location;
 
   if (!apiData) return console.log('Could not find location');
 
@@ -84,29 +86,25 @@ class Header extends Component {
   }
 
   createCitiesObj = async (city) => {
-    const { lat, lng } = await getCoordinates(city);
+    const googleGeoInfo = await getCoordinates(city);
+    const cityName = googleGeoInfo.formatted_address;
+    const { lat, lng } = googleGeoInfo.geometry.location;
 
-    const { data } = await axios.get(
+    const { data: weather } = await axios.get(
       `${apiBase}onecall?lat=${lat}&lon=${lng}&units=imperial&appid=${apiKey}`
     );
 
-    const cityObject = { name: city, data };
+    const cityObject = { name: cityName, weather };
     return cityObject;
   };
 
   render() {
-    //return this.renderHelper();
     const cityData = this.state.cityData;
 
     if (cityData.length === 0) {
       return <p>Loading data...</p>;
     }
 
-    //const firstCity = cityData;
-
-    // const weatherIcon = data.weather[0].icon;
-    // const weatherType = data.weather[0].description;
-    // const date = moment.unix(data.dt).format('dddd MMMM Do YYYY h:mma');
     return (
       <HeaderStyles>
         <ImgContainer>
