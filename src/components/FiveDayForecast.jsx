@@ -9,7 +9,6 @@ const ForecastWeather = styled.div`
   justify-content: space-between;
   color: white;
   width: 100%;
-
   }
 `;
 

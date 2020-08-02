@@ -12,16 +12,16 @@ const DayContainer = styled.div`
   height: 100%;
   img {
     padding: 0;
-    margin: 0;
+    margin: -15px 0;
     width: 100%;
     height: auto;
+    filter: hue-rotate(50deg) brightness(170%);
   }
 `;
 
 const iconUrl = config.iconUrl;
 
 const Day = (props) => {
-  console.log(props.day);
   const day = props.day;
   //Min
   const minTemp = Math.round(day.temp.min);
@@ -37,7 +37,7 @@ const Day = (props) => {
       <p>{weekDay}</p>
       <img src={icon} alt={day.weather[0].main} />
       <p>
-        {minTemp}° {maxTemp}°
+        {minTemp} / {maxTemp}°
       </p>
     </DayContainer>
   );

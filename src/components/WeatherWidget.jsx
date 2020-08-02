@@ -9,14 +9,22 @@ const CurrentWeather = styled.div`
   padding: 20px;
   margin: 20px;
   width: 40%;
-  //height: 300px;
 
+  //day gradient
   background-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.2),
     rgba(109, 213, 250, 0.4),
     rgba(41, 128, 185, 0.65)
   );
+
+  //nightgradient
+  // background: linear-gradient(
+  //   to bottom,
+  //   rgba(15, 32, 39, 0.2),
+  //   rgba(32, 58, 67, 0.4),
+  //   rgba(44, 83, 100, 0.65)
+  // );
 
   box-shadow: 2px 3px 10px 0 rgba(0, 0, 0, 0.2);
 
@@ -26,6 +34,26 @@ const CurrentWeather = styled.div`
 
   .description {
     text-transform: capitalize;
+  }
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  margin: -10px 0;
+
+  h2 {
+    font-weight: 200;
+    font-size: 36px;
+  }
+
+  img {
+    padding: 0;
+    margin-right: 50px;
+    filter: hue-rotate(50deg) brightness(170%);
   }
 `;
 
@@ -39,7 +67,7 @@ const WeatherWidget = (props) => {
   const currentWeather = cityData.current;
   const latestDate = moment
     .unix(currentWeather.dt)
-    .format('dddd MMMM Do YYYY h:mma');
+    .format('dddd, MMMM Do YYYY h:mma');
   const currentWeatherIcon = currentWeather.weather[0].icon;
   const description = currentWeather.weather[0].description;
   const weatherType = currentWeather.weather[0].main;
@@ -52,19 +80,23 @@ const WeatherWidget = (props) => {
 
   return (
     <CurrentWeather>
-      <h1>{cityName + ', CA'}</h1>
-      <p>{latestDate}</p>
       <div>
-        <img src={iconUrl + currentWeatherIcon + '@2x.png'} alt={weatherType} />
-        <p className="description">{description}</p>
+        <h1>{cityName}</h1>
+        <p>{latestDate}</p>
       </div>
-      <ul>
-        <li>Weather: {description}</li>
-        <li>Temperature: {Math.round(temperature)}°</li>
-        <li>
-          Wind: {windDirection} degrees at {Math.round(windSpeed)} MPH
-        </li>
-      </ul>
+
+      <DetailsContainer>
+        <img src={iconUrl + currentWeatherIcon + '@2x.png'} alt={weatherType} />
+        <div>
+          <h2 className="description">
+            {description} {Math.round(temperature)}°
+          </h2>
+          <p>
+            Wind: {windDirection}° at {Math.round(windSpeed)} MPH
+          </p>
+        </div>
+      </DetailsContainer>
+
       <FiveDayForecast data={forecast} />
     </CurrentWeather>
   );
