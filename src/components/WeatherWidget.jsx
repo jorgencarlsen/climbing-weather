@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import config from '../config.json';
 import FiveDayForecast from './FiveDayForecast';
-import { useState } from 'react';
+import HourlyForecast from './HourlyForecast';
 
 const CurrentWeather = styled.div`
   color: white;
@@ -37,7 +37,6 @@ const CurrentWeather = styled.div`
   border-radius: 16px;
 
   ${(props) => {
-    console.log(props.showForecast);
     if (props.showForecast) {
       return `
       height: 500px;
@@ -79,11 +78,19 @@ const iconUrl = config.iconUrl;
 
 const WeatherWidget = (props) => {
   const [showForecast, setShowForecast] = useState(false);
+  const [showHourly, setShowHourly] = useState(false);
 
   const toggleForecastView = function () {
     setShowForecast(!showForecast);
+    if (!showForecast) setShowHourly(false);
   };
 
+  const toggleHourlyView = function () {
+    setShowHourly(!showHourly);
+    if (!showHourly) setShowForecast(false);
+  };
+
+  //Get Data to pass to fiveday forecast and hourly forecast
   const cityName = props.data.name;
   const cityWeatherData = props.data.weather;
 
@@ -99,8 +106,12 @@ const WeatherWidget = (props) => {
   const windDirection = currentWeather.wind_deg;
   const windSpeed = currentWeather.wind_speed;
 
-  //get forecast Data
-  const forecast = cityWeatherData.daily;
+  ////Get Data to pass to fiveday forecast and hourly forecast
+  const forecastData = cityWeatherData.daily;
+  const hourlyData = cityWeatherData.hourly;
+  hourlyData.forEach((hour) => {
+    console.log(moment.unix(hour.dt).format('h:mma'));
+  });
 
   return (
     <CurrentWeather showForecast={showForecast}>
@@ -108,7 +119,7 @@ const WeatherWidget = (props) => {
         <h1>{cityName}</h1>
         <p>{latestDate}</p>
       </div>
-
+      {console.log(showHourly)}
       <DetailsContainer>
         <img
           className="weather-icon"
@@ -123,10 +134,22 @@ const WeatherWidget = (props) => {
             Wind: {windDirection}° at {Math.round(windSpeed)} MPH
           </p>
         </div>
-        <button onClick={toggleForecastView}>View Forecast</button>
+        <button
+          className={showHourly ? 'hourly selected' : 'hourly'}
+          onClick={toggleHourlyView}
+        >
+          Hourly
+        </button>
+        <button
+          className={showForecast ? 'forecast selected' : 'forecast'}
+          onClick={toggleForecastView}
+        >
+          Forecast
+        </button>
       </DetailsContainer>
 
-      <FiveDayForecast data={forecast} toggle={showForecast} />
+      <HourlyForecast data={hourlyData} toggle={showHourly} />
+      <FiveDayForecast data={forecastData} toggle={showForecast} />
       {/* {showForecast && <FiveDayForecast data={forecast} />} */}
     </CurrentWeather>
   );

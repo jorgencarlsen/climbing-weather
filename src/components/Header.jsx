@@ -4,6 +4,7 @@ import axios from 'axios';
 import config from '../config.json';
 import '../index.css';
 import WeatherWidget from './WeatherWidget';
+import Loading from './Loading';
 
 //API url import
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -102,7 +103,7 @@ class Header extends Component {
     const cityData = this.state.cityData;
 
     if (cityData.length === 0) {
-      return <p>Loading data...</p>;
+      return <Loading />;
     }
 
     return (

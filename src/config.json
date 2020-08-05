@@ -1,4 +1,5 @@
 {
+  "siteTitle": "Climbing Weather",
   "apiBase": "http://api.openweathermap.org/data/2.5/",
   "iconUrl": "http://openweathermap.org/img/wn/",
   "googleGeoCodingApiBase": "https://maps.googleapis.com/maps/api/geocode/json?address="
