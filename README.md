@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A weather app built with the Open Weather API that displays weather information for top California climbing destinations.
 
 ## Available Scripts
 
