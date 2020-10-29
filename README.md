@@ -1,3 +1,6 @@
+# Climbing Weather
+
+## Description
 A weather app built with the Open Weather API that displays weather information for top California climbing destinations.
 
 ## Available Scripts
